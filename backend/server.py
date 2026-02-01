@@ -284,20 +284,24 @@ async def get_current_gold_price():
             
             if response.status_code == 200:
                 data = response.json()
-                price_per_oz = data.get("price", 2000)  # Default fallback
-                price_per_gram = price_per_oz / 31.1035  # Convert to grams
+                price_per_oz_usd = data.get("price", 2000)  # Default fallback
+                price_per_gram_usd = price_per_oz_usd / 31.1035  # Convert to grams
+                
+                # Convert to QAR (1 USD = 3.64 QAR)
+                USD_TO_QAR = 3.64
+                price_per_gram_qar = price_per_gram_usd * USD_TO_QAR
                 
                 # Calculate prices for different karats
-                price_24k = price_per_gram
-                price_22k = price_per_gram * (22/24)
-                price_18k = price_per_gram * (18/24)
+                price_24k = price_per_gram_qar
+                price_22k = price_per_gram_qar * (22/24)
+                price_18k = price_per_gram_qar * (18/24)
                 
                 new_price = {
                     "timestamp": datetime.now(timezone.utc),
                     "price_24k": round(price_24k, 2),
                     "price_22k": round(price_22k, 2),
                     "price_18k": round(price_18k, 2),
-                    "currency": "USD"
+                    "currency": "QAR"
                 }
                 
                 await gold_prices_collection.insert_one(new_price)
@@ -306,13 +310,13 @@ async def get_current_gold_price():
     except Exception as e:
         print(f"Gold price fetch error: {str(e)}")
     
-    # Return mock data if API fails or any exception occurs
+    # Return mock data if API fails or any exception occurs (in QAR)
     return {
         "timestamp": datetime.now(timezone.utc),
-        "price_24k": 65.0,
-        "price_22k": 59.6,
-        "price_18k": 48.8,
-        "currency": "USD"
+        "price_24k": 236.6,  # 65 USD * 3.64
+        "price_22k": 216.9,  # 59.6 USD * 3.64
+        "price_18k": 177.6,  # 48.8 USD * 3.64
+        "currency": "QAR"
     }
 
 @app.get("/api/gold/prices/historical")
