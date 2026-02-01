@@ -166,9 +166,9 @@ export default function InvestmentScreen() {
                     selectedKarat === karat && styles.karatPriceActive,
                   ]}
                 >
-                  ${karat === 24 ? goldPrice.price_24k.toFixed(2) : 
+                  {karat === 24 ? goldPrice.price_24k.toFixed(2) : 
                     karat === 22 ? goldPrice.price_22k.toFixed(2) : 
-                    goldPrice.price_18k.toFixed(2)}/جم
+                    goldPrice.price_18k.toFixed(2)} ريال/جم
                 </Text>
               )}
             </TouchableOpacity>
@@ -229,7 +229,7 @@ export default function InvestmentScreen() {
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>السعر للجرام</Text>
           <Text style={styles.summaryValue}>
-            ${getCurrentPrice().toFixed(2)}
+            {getCurrentPrice().toFixed(2)} ريال
           </Text>
         </View>
 
@@ -240,7 +240,7 @@ export default function InvestmentScreen() {
 
         <View style={[styles.summaryRow, styles.totalRow]}>
           <Text style={styles.totalLabel}>الإجمالي</Text>
-          <Text style={styles.totalValue}>${getTotalPrice().toFixed(2)}</Text>
+          <Text style={styles.totalValue}>{getTotalPrice().toFixed(2)} ريال</Text>
         </View>
       </View>
 
@@ -254,10 +254,10 @@ export default function InvestmentScreen() {
       <View style={styles.infoCard}>
         <Ionicons name="information-circle" size={24} color="#D4AF37" />
         <Text style={styles.infoText}>
-          • جميع المعاملات متوافقة مع الشريعة الإسلامية{'\n'}
-          • يتم تحديث الأسعار كل دقيقة{'\n'}
-          • إمكانية البيع في أي وقت{'\n'}
-          • تخزين آمن ومؤمن
+          {`• جميع المعاملات متوافقة مع الشريعة الإسلامية
+• يتم تحديث الأسعار كل دقيقة
+• إمكانية البيع في أي وقت
+• تخزين آمن ومؤمن`}
         </Text>
       </View>
     </ScrollView>
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   karatContainer: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     gap: 12,
   },
   karatButton: {
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     color: '#D4AF37',
   },
   inputContainer: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     alignItems: 'center',
     gap: 12,
   },
@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   quickSelect: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     gap: 8,
     marginTop: 16,
   },
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
     borderColor: '#3A3A3A',
   },
   summaryRow: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 12,
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
     color: '#D4AF37',
   },
   buyButton: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#D4AF37',
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
   },
   infoCard: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     backgroundColor: '#2A2A2A',
     marginHorizontal: 20,
     marginBottom: 30,
