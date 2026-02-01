@@ -635,6 +635,144 @@ async def get_user_vouchers(request: Request):
     
     return vouchers
 
+# Stores Endpoints
+@app.get("/api/stores")
+async def get_stores():
+    """Get all jewelry stores"""
+    stores = await stores_collection.find({}, {"_id": 0}).to_list(100)
+    
+    # If empty, seed with sample data
+    if not stores:
+        sample_stores = [
+            {
+                "store_id": "store_1",
+                "name": "Lazurde Jewelry",
+                "name_ar": "لازوردي للمجوهرات",
+                "description": "Premium gold jewelry store",
+                "description_ar": "محل مجوهرات ذهبية فاخرة",
+                "rating": 4.8,
+                "total_products": 45,
+                "location": "Doha, Qatar",
+                "phone": "+974 4444 5555",
+                "is_verified": True
+            },
+            {
+                "store_id": "store_2",
+                "name": "Damas Jewellery",
+                "name_ar": "داماس للمجوهرات",
+                "description": "Luxury jewelry collection",
+                "description_ar": "تشكيلة مجوهرات راقية",
+                "rating": 4.7,
+                "total_products": 38,
+                "location": "The Pearl, Doha",
+                "phone": "+974 4444 6666",
+                "is_verified": True
+            },
+            {
+                "store_id": "store_3",
+                "name": "Al Fardan Jewellery",
+                "name_ar": "الفردان للمجوهرات",
+                "description": "Fine gold and diamond jewelry",
+                "description_ar": "مجوهرات ذهبية وماسية فاخرة",
+                "rating": 4.9,
+                "total_products": 52,
+                "location": "Katara, Doha",
+                "phone": "+974 4444 7777",
+                "is_verified": True
+            },
+            {
+                "store_id": "store_4",
+                "name": "Gold Souk",
+                "name_ar": "سوق الذهب",
+                "description": "Traditional gold market",
+                "description_ar": "سوق الذهب التقليدي",
+                "rating": 4.5,
+                "total_products": 68,
+                "location": "Souq Waqif, Doha",
+                "phone": "+974 4444 8888",
+                "is_verified": True
+            }
+        ]
+        await stores_collection.insert_many(sample_stores)
+        stores = sample_stores
+    
+    return stores
+
+@app.get("/api/stores/{store_id}")
+async def get_store(store_id: str):
+    """Get specific store details"""
+    store = await stores_collection.find_one(
+        {"store_id": store_id},
+        {"_id": 0}
+    )
+    
+    if not store:
+        raise HTTPException(status_code=404, detail="Store not found")
+    
+    return store
+
+@app.get("/api/stores/{store_id}/products")
+async def get_store_products(store_id: str):
+    """Get all products from a specific store"""
+    # Check if store exists
+    store = await stores_collection.find_one({"store_id": store_id})
+    if not store:
+        raise HTTPException(status_code=404, detail="Store not found")
+    
+    # Get products
+    products = await jewelry_collection.find(
+        {"store_id": store_id},
+        {"_id": 0}
+    ).to_list(100)
+    
+    # If empty, seed with sample products
+    if not products:
+        jewelry_images = {
+            "necklace": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400",
+            "ring": "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400",
+            "bracelet": "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400",
+            "earrings": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400",
+        }
+        
+        store_name = store.get("name_ar", "محل مجوهرات")
+        
+        sample_products = []
+        product_templates = [
+            ("necklace", "قلادة", "قلادة ذهبية فاخرة", [20, 25, 30], [22, 24], [2800, 3200, 3600, 4200]),
+            ("ring", "خاتم", "خاتم ذهبي أنيق", [5, 7, 10], [18, 22, 24], [800, 1200, 1600, 2000]),
+            ("bracelet", "سوار", "سوار ذهبي راقي", [15, 18, 22], [18, 22], [2000, 2400, 2800, 3200]),
+            ("earrings", "أقراط", "أقراط ذهبية مميزة", [8, 10, 12], [18, 22], [1200, 1500, 1800, 2200]),
+        ]
+        
+        for category, cat_ar, desc_ar, weights, karats, prices in product_templates:
+            for i in range(3):  # 3 products per category
+                weight = weights[i % len(weights)]
+                karat = karats[i % len(karats)]
+                price = prices[i % len(prices)]
+                
+                product = {
+                    "item_id": f"{store_id}_{category}_{i+1}",
+                    "store_id": store_id,
+                    "store_name": store_name,
+                    "name": f"Gold {category.title()} {i+1}",
+                    "name_ar": f"{cat_ar} {store_name} - {i+1}",
+                    "description": f"Beautiful {karat}K gold {category}",
+                    "description_ar": f"{desc_ar} عيار {karat} من {store_name}",
+                    "price": price,
+                    "weight_grams": weight,
+                    "karat": karat,
+                    "category": category,
+                    "image_url": jewelry_images[category],
+                    "in_stock": True,
+                    "rating": round(4.3 + (i * 0.2), 1)
+                }
+                sample_products.append(product)
+        
+        await jewelry_collection.insert_many(sample_products)
+        products = sample_products
+    
+    return products
+
 # Health check
 @app.get("/api/health")
 async def health_check():
