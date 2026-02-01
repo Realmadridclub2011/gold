@@ -105,6 +105,8 @@ class Voucher(BaseModel):
 
 class JewelryItem(BaseModel):
     item_id: str
+    store_id: str  # New field
+    store_name: str  # New field
     name: str
     name_ar: str
     description: str
@@ -113,8 +115,21 @@ class JewelryItem(BaseModel):
     weight_grams: float
     karat: int
     category: str  # necklace, ring, bracelet, earrings
-    image_base64: Optional[str] = None
+    image_url: Optional[str] = None  # Changed from base64 to URL
     in_stock: bool = True
+
+class Store(BaseModel):
+    store_id: str
+    name: str
+    name_ar: str
+    description: str
+    description_ar: str
+    logo_url: Optional[str] = None
+    rating: float = 4.5
+    total_products: int = 0
+    location: Optional[str] = None
+    phone: Optional[str] = None
+    is_verified: bool = True
 
 # Auth Helper Functions
 async def get_current_user(request: Request) -> Optional[User]:
