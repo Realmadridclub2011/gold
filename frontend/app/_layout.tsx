@@ -1,7 +1,13 @@
 import { Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { AuthProvider } from '../contexts/AuthContext';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, I18nManager, Platform } from 'react-native';
+
+// Force RTL layout
+if (!I18nManager.isRTL) {
+  I18nManager.forceRTL(true);
+  I18nManager.allowRTL(true);
+}
 
 export default function RootLayout() {
   return (
