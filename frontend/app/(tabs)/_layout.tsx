@@ -15,12 +15,10 @@ export default function TabLayout() {
           height: Platform.OS === 'ios' ? 85 : 65,
           paddingBottom: Platform.OS === 'ios' ? 20 : 10,
           paddingTop: 10,
-          flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         },
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '600',
-          writingDirection: 'rtl',
         },
         headerStyle: {
           backgroundColor: '#1A1A1A',
@@ -34,20 +32,11 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="profile"
+        name="index"
         options={{
-          title: 'الحساب',
+          title: 'الرئيسية',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="orders"
-        options={{
-          title: 'الطلبات',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list" size={size} color={color} />
+            <Ionicons name="home" size={size} color={color} />
           ),
         }}
       />
@@ -61,11 +50,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="index"
+        name="orders"
         options={{
-          title: 'الرئيسية',
+          title: 'الطلبات',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
+            <Ionicons name="list" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'الحساب',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
           ),
         }}
       />
