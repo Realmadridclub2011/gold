@@ -77,7 +77,7 @@ export default function StoresScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size=\"large\" color=\"#D4AF37\" />
+        <ActivityIndicator size="large" color="#D4AF37" />
       </View>
     );
   }
