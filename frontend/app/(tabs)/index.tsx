@@ -129,17 +129,17 @@ export default function HomeScreen() {
           
           <View style={styles.priceRow}>
             <Text style={styles.priceLabel}>عيار 24</Text>
-            <Text style={styles.priceValue}>${goldPrice.price_24k.toFixed(2)}</Text>
+            <Text style={styles.priceValue}>{goldPrice.price_24k.toFixed(2)} ريال</Text>
           </View>
           
           <View style={styles.priceRow}>
             <Text style={styles.priceLabel}>عيار 22</Text>
-            <Text style={styles.priceValue}>${goldPrice.price_22k.toFixed(2)}</Text>
+            <Text style={styles.priceValue}>{goldPrice.price_22k.toFixed(2)} ريال</Text>
           </View>
           
           <View style={styles.priceRow}>
             <Text style={styles.priceLabel}>عيار 18</Text>
-            <Text style={styles.priceValue}>${goldPrice.price_18k.toFixed(2)}</Text>
+            <Text style={styles.priceValue}>{goldPrice.price_18k.toFixed(2)} ريال</Text>
           </View>
           
           <Text style={styles.priceNote}>السعر للجرام الواحد</Text>
