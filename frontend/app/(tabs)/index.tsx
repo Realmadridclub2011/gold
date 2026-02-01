@@ -175,7 +175,7 @@ export default function HomeScreen() {
             تشكيلة راقية من المجوهرات مع خدمة توصيل
           </Text>
         </View>
-        <Ionicons name="chevron-forward" size={24} color="#B8B8B8" />
+        <Ionicons name="chevron-back" size={24} color="#B8B8B8" />
       </TouchableOpacity>
 
       <TouchableOpacity
