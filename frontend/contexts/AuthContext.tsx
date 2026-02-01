@@ -11,7 +11,7 @@ if (!I18nManager.isRTL) {
   I18nManager.allowRTL(true);
 }
 
-const BACKEND_URL = Constants.expoConfig?.extra?.EXPO_PUBLIC_BACKEND_URL || 'https://golden-treasury.preview.emergentagent.com';
+const BACKEND_URL = Constants.expoConfig?.extra?.EXPO_PUBLIC_BACKEND_URL || 'http://localhost:8001';
 const AUTH_URL = 'https://auth.emergentagent.com';
 
 interface User {
