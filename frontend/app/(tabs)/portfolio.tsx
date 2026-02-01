@@ -162,10 +162,8 @@ export default function PortfolioScreen() {
       <View style={styles.infoCard}>
         <Text style={styles.infoTitle}>معلومات هامة</Text>
         <Text style={styles.infoText}>
-          • يتم تحديث الأسعار كل دقيقة{'
-'}
-          • قيمة محفظتك تحسب بناءً على أسعار السوق الحالية{'
-'}
+          • يتم تحديث الأسعار كل دقيقة{'\n'}
+          • قيمة محفظتك تحسب بناءً على أسعار السوق الحالية{'\n'}
           • لبيع أو شراء الذهب، انتقل إلى قسم الاستثمار
         </Text>
       </View>
