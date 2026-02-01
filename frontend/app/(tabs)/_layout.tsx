@@ -1,11 +1,9 @@
 // app/(tabs)/_layout.tsx
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Platform, I18nManager } from 'react-native';
+import { Platform } from 'react-native';
 
 export default function TabLayout() {
-  const isRTL = I18nManager.isRTL;
-
   return (
     <Tabs
       screenOptions={{
@@ -18,12 +16,16 @@ export default function TabLayout() {
           height: Platform.OS === 'ios' ? 85 : 65,
           paddingBottom: Platform.OS === 'ios' ? 20 : 10,
           paddingTop: 10,
-          // عكس ترتيب الأيقونات بحيث تبدأ من اليمين في RTL
-          flexDirection: isRTL ? 'row-reverse' : 'row',
+          // نجبر ترتيب الأيقونات من اليمين لليسار
+          flexDirection: 'row-reverse',
         },
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '600',
+        },
+        // نخلي كل آيتم يميل لجهة اليمين أيضًا
+        tabBarItemStyle: {
+          flexDirection: 'column',
         },
         headerStyle: {
           backgroundColor: '#1A1A1A',
