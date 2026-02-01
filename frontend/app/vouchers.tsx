@@ -195,7 +195,7 @@ ${message ? `رسالة من المرسل: ${message}\n\n` : ''}
           
           <View style={styles.voucherPreview}>
             <Ionicons name="gift" size={60} color="#D4AF37" />
-            <Text style={styles.voucherAmount}>${amount}</Text>
+            <Text style={styles.voucherAmount}>{amount} \u0631\u064a\u0627\u0644</Text>
             <Text style={styles.voucherRecipient}>إلى: {recipientName}</Text>
           </View>
         </View>
