@@ -342,7 +342,9 @@ async def get_current_gold_price():
 async def get_live_gold_price_qar():
     """
     Fetch REAL-TIME spot gold price in QAR.
-    Uses GoldAPI.io for gold prices and ExchangeRate.host for USD to QAR conversion.
+    Uses free APIs without authentication:
+    - FreeGoldAPI.com for gold prices (XAU/USD)
+    - open.er-api.com for USD to QAR conversion
     Implements 60-second caching to reduce API calls.
     """
     try:
@@ -352,40 +354,47 @@ async def get_live_gold_price_qar():
             if cache_age < 60:
                 return gold_qar_cache["data"]
         
-        # Fetch gold price from GoldAPI.io
         async with httpx.AsyncClient() as http_client:
-            # Get gold price in USD
+            # Get gold price in USD from FreeGoldAPI
             gold_response = await http_client.get(
-                "https://www.goldapi.io/api/XAU/USD",
-                headers={"x-access-token": GOLDAPI_KEY},
+                "https://freegoldapi.com/data/latest.json",
                 timeout=10.0
             )
             
             if gold_response.status_code != 200:
                 raise HTTPException(
                     status_code=502,
-                    detail=f"GoldAPI returned status {gold_response.status_code}"
+                    detail=f"FreeGoldAPI returned status {gold_response.status_code}"
                 )
             
             gold_data = gold_response.json()
-            ounce_usd = float(gold_data.get("price", 0))
+            
+            # Get the latest gold price
+            if not gold_data or len(gold_data) == 0:
+                raise HTTPException(
+                    status_code=502,
+                    detail="No gold price data received from FreeGoldAPI"
+                )
+            
+            latest_gold = gold_data[-1]  # Most recent entry
+            ounce_usd = float(latest_gold.get("price", 0))
             
             if ounce_usd == 0:
                 raise HTTPException(
                     status_code=502,
-                    detail="Invalid gold price received from GoldAPI"
+                    detail="Invalid gold price received from FreeGoldAPI"
                 )
             
-            # Get USD to QAR exchange rate
+            # Get USD to QAR exchange rate from Open Exchange Rates API (free, no key needed)
             exchange_response = await http_client.get(
-                "https://api.exchangerate.host/latest?base=USD&symbols=QAR",
+                "https://open.er-api.com/v6/latest/USD",
                 timeout=10.0
             )
             
             if exchange_response.status_code != 200:
                 raise HTTPException(
                     status_code=502,
-                    detail=f"ExchangeRate API returned status {exchange_response.status_code}"
+                    detail=f"Exchange Rate API returned status {exchange_response.status_code}"
                 )
             
             exchange_data = exchange_response.json()
@@ -397,12 +406,13 @@ async def get_live_gold_price_qar():
             
             # Prepare response
             response_data = {
-                "source": "GoldAPI + ExchangeRateHost",
+                "source": "FreeGoldAPI + OpenExchangeRates",
                 "timestamp": datetime.now(timezone.utc).isoformat(),
                 "ounceUSD": round(ounce_usd, 2),
                 "usdToQar": round(usd_to_qar, 4),
                 "ounceQAR": round(ounce_qar, 2),
-                "gramQAR": round(gram_qar, 2)
+                "gramQAR": round(gram_qar, 2),
+                "goldDate": latest_gold.get("date", "N/A")
             }
             
             # Update cache
