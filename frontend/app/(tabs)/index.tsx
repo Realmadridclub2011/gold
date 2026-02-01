@@ -9,13 +9,16 @@ import {
   RefreshControl,
   Linking,
   Alert,
+  I18nManager,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
 import Constants from 'expo-constants';
 
-const BACKEND_URL = Constants.expoConfig?.extra?.EXPO_PUBLIC_BACKEND_URL || 'https://golden-treasury.preview.emergentagent.com';
+const BACKEND_URL =
+  Constants.expoConfig?.extra?.EXPO_PUBLIC_BACKEND_URL ||
+  'https://golden-treasury.preview.emergentagent.com';
 
 interface GoldPrice {
   price_24k: number;
@@ -32,7 +35,6 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    // Allow guest browsing - no redirect to login
     if (!authLoading) {
       fetchGoldPrice();
     }
@@ -61,8 +63,10 @@ export default function HomeScreen() {
   const handleWhatsAppSupport = () => {
     const message = 'مرحبا، أحتاج لمساعدة';
     const phoneNumber = '1234567890'; // Replace with actual support number
-    const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
-    
+    const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(
+      message,
+    )}`;
+
     Linking.canOpenURL(url)
       .then((supported) => {
         if (supported) {
@@ -82,16 +86,32 @@ export default function HomeScreen() {
     );
   }
 
+  const isRTL = I18nManager.isRTL;
+
   return (
     <ScrollView
       style={styles.container}
+      contentContainerStyle={styles.content}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#D4AF37" />
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor="#D4AF37"
+        />
       }
     >
       {/* Header */}
-      <View style={styles.header}>
-        <View>
+      <View
+        style={[
+          styles.header,
+          { flexDirection: isRTL ? 'row-reverse' : 'row' },
+        ]}
+      >
+        <View
+          style={{
+            alignItems: isRTL ? 'flex-end' : 'flex-start',
+          }}
+        >
           <Text style={styles.greeting}>مرحبا</Text>
           <Text style={styles.userName}>{user?.name || 'مستخدم'}</Text>
         </View>
@@ -116,38 +136,80 @@ export default function HomeScreen() {
       {/* Gold Price Card */}
       {goldPrice && (
         <View style={styles.priceCard}>
-          <View style={styles.priceHeader}>
-            <Text style={styles.priceTitle}>أسعار الذهب الفورية</Text>
-            <View style={styles.liveIndicator}>
+          <View
+            style={[
+              styles.priceHeader,
+              { flexDirection: isRTL ? 'row-reverse' : 'row' },
+            ]}
+          >
+            <Text style={[styles.priceTitle, { textAlign: 'right' }]}>
+              أسعار الذهب الفورية
+            </Text>
+            <View
+              style={[
+                styles.liveIndicator,
+                { flexDirection: isRTL ? 'row-reverse' : 'row' },
+              ]}
+            >
               <View style={styles.liveDot} />
               <Text style={styles.liveText}>مباشر</Text>
             </View>
           </View>
-          
-          <View style={styles.priceRow}>
-            <Text style={styles.priceLabel}>عيار 24</Text>
-            <Text style={styles.priceValue}>{goldPrice.price_24k.toFixed(2)} ريال</Text>
+
+          <View
+            style={[
+              styles.priceRow,
+              { flexDirection: isRTL ? 'row-reverse' : 'row' },
+            ]}
+          >
+            <Text style={[styles.priceLabel, { textAlign: 'right' }]}>
+              عيار 24
+            </Text>
+            <Text style={styles.priceValue}>
+              {goldPrice.price_24k.toFixed(2)} ريال
+            </Text>
           </View>
-          
-          <View style={styles.priceRow}>
-            <Text style={styles.priceLabel}>عيار 22</Text>
-            <Text style={styles.priceValue}>{goldPrice.price_22k.toFixed(2)} ريال</Text>
+
+          <View
+            style={[
+              styles.priceRow,
+              { flexDirection: isRTL ? 'row-reverse' : 'row' },
+            ]}
+          >
+            <Text style={[styles.priceLabel, { textAlign: 'right' }]}>
+              عيار 22
+            </Text>
+            <Text style={styles.priceValue}>
+              {goldPrice.price_22k.toFixed(2)} ريال
+            </Text>
           </View>
-          
-          <View style={styles.priceRow}>
-            <Text style={styles.priceLabel}>عيار 18</Text>
-            <Text style={styles.priceValue}>{goldPrice.price_18k.toFixed(2)} ريال</Text>
+
+          <View
+            style={[
+              styles.priceRow,
+              { flexDirection: isRTL ? 'row-reverse' : 'row' },
+            ]}
+          >
+            <Text style={[styles.priceLabel, { textAlign: 'right' }]}>
+              عيار 18
+            </Text>
+            <Text style={styles.priceValue}>
+              {goldPrice.price_18k.toFixed(2)} ريال
+            </Text>
           </View>
-          
+
           <Text style={styles.priceNote}>السعر للجرام الواحد</Text>
         </View>
       )}
 
       {/* Features */}
       <Text style={styles.sectionTitle}>الخدمات</Text>
-      
+
       <TouchableOpacity
-        style={styles.featureCard}
+        style={[
+          styles.featureCard,
+          { flexDirection: isRTL ? 'row-reverse' : 'row' },
+        ]}
         onPress={() => router.push('/investment')}
       >
         <View style={styles.featureIcon}>
@@ -159,11 +221,18 @@ export default function HomeScreen() {
             استثمر في سبائك الذهب الخالص بعيار 24
           </Text>
         </View>
-        <Ionicons name="chevron-forward" size={24} color="#B8B8B8" />
+        <Ionicons
+          name={isRTL ? 'chevron-back' : 'chevron-forward'}
+          size={24}
+          color="#B8B8B8"
+        />
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.featureCard}
+        style={[
+          styles.featureCard,
+          { flexDirection: isRTL ? 'row-reverse' : 'row' },
+        ]}
         onPress={() => router.push('/jewelry')}
       >
         <View style={styles.featureIcon}>
@@ -175,11 +244,18 @@ export default function HomeScreen() {
             تشكيلة راقية من المجوهرات مع خدمة توصيل
           </Text>
         </View>
-        <Ionicons name="chevron-back" size={24} color="#B8B8B8" />
+        <Ionicons
+          name={isRTL ? 'chevron-back' : 'chevron-forward'}
+          size={24}
+          color="#B8B8B8"
+        />
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.featureCard}
+        style={[
+          styles.featureCard,
+          { flexDirection: isRTL ? 'row-reverse' : 'row' },
+        ]}
         onPress={() => router.push('/vouchers')}
       >
         <View style={styles.featureIcon}>
@@ -191,13 +267,22 @@ export default function HomeScreen() {
             أرسل قسائم ذهب رقمية عبر واتساب
           </Text>
         </View>
-        <Ionicons name="chevron-forward" size={24} color="#B8B8B8" />
+        <Ionicons
+          name={isRTL ? 'chevron-back' : 'chevron-forward'}
+          size={24}
+          color="#B8B8B8"
+        />
       </TouchableOpacity>
 
       {/* Why Choose Us */}
       <Text style={styles.sectionTitle}>لماذا نحن؟</Text>
-      
-      <View style={styles.benefitCard}>
+
+      <View
+        style={[
+          styles.benefitCard,
+          { flexDirection: isRTL ? 'row-reverse' : 'row' },
+        ]}
+      >
         <View style={styles.benefitIcon}>
           <Text style={styles.benefitEmoji}>✅</Text>
         </View>
@@ -209,7 +294,12 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      <View style={styles.benefitCard}>
+      <View
+        style={[
+          styles.benefitCard,
+          { flexDirection: isRTL ? 'row-reverse' : 'row' },
+        ]}
+      >
         <View style={styles.benefitIcon}>
           <Text style={styles.benefitEmoji}>🔒</Text>
         </View>
@@ -221,7 +311,12 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      <View style={[styles.benefitCard, { marginBottom: 30 }]}>
+      <View
+        style={[
+          styles.benefitCard,
+          { flexDirection: isRTL ? 'row-reverse' : 'row', marginBottom: 30 },
+        ]}
+      >
         <View style={styles.benefitIcon}>
           <Text style={styles.benefitEmoji}>⚡</Text>
         </View>
@@ -241,6 +336,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1A1A1A',
   },
+  content: {
+    paddingBottom: 24,
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -248,7 +346,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#1A1A1A',
   },
   header: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
@@ -257,12 +354,14 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 16,
     color: '#B8B8B8',
+    textAlign: 'right',
   },
   userName: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#FFFFFF',
     marginTop: 4,
+    textAlign: 'right',
   },
   whatsappButton: {
     width: 50,
@@ -298,7 +397,6 @@ const styles = StyleSheet.create({
     borderColor: '#3A3A3A',
   },
   priceHeader: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
@@ -309,7 +407,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   liveIndicator: {
-    flexDirection: 'row',
     alignItems: 'center',
   },
   liveDot: {
@@ -317,7 +414,7 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: '#10B981',
-    marginRight: 6,
+    marginHorizontal: 6,
   },
   liveText: {
     fontSize: 12,
@@ -325,7 +422,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   priceRow: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 12,
@@ -357,7 +453,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   featureCard: {
-    flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#2A2A2A',
     marginHorizontal: 20,
@@ -374,7 +469,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1A1A1A',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    marginHorizontal: 16,
   },
   featureContent: {
     flex: 1,
@@ -392,13 +487,12 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   benefitCard: {
-    flexDirection: 'row',
     alignItems: 'flex-start',
     marginHorizontal: 20,
     marginBottom: 16,
   },
   benefitIcon: {
-    marginRight: 12,
+    marginHorizontal: 12,
   },
   benefitEmoji: {
     fontSize: 28,
