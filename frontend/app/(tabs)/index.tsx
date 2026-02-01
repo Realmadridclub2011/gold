@@ -32,14 +32,11 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
+    // Allow guest browsing - no redirect to login
     if (!authLoading) {
-      if (!user) {
-        router.replace('/login');
-      } else {
-        fetchGoldPrice();
-      }
+      fetchGoldPrice();
     }
-  }, [user, authLoading]);
+  }, [authLoading]);
 
   const fetchGoldPrice = async () => {
     try {
