@@ -58,7 +58,7 @@ class GoldPrice(BaseModel):
     price_24k: float
     price_22k: float
     price_18k: float
-    currency: str = "USD"
+    currency: str = "QAR"
 
 class OrderItem(BaseModel):
     item_id: str
