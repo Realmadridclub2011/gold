@@ -45,6 +45,7 @@ orders_collection = db.orders
 portfolio_collection = db.portfolio
 vouchers_collection = db.vouchers
 jewelry_collection = db.jewelry
+stores_collection = db.stores  # New collection
 
 # Pydantic Models
 class User(BaseModel):
