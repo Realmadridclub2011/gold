@@ -715,7 +715,10 @@ async def get_store(store_id: str):
 async def get_store_products(store_id: str):
     """Get all products from a specific store"""
     # Check if store exists
-    store = await stores_collection.find_one({"store_id": store_id})
+    store = await stores_collection.find_one(
+        {"store_id": store_id},
+        {"_id": 0}
+    )
     if not store:
         raise HTTPException(status_code=404, detail="Store not found")
     
