@@ -305,14 +305,15 @@ async def get_current_gold_price():
     
     except Exception as e:
         print(f"Gold price fetch error: {str(e)}")
-        # Return mock data if API fails
-        return {
-            "timestamp": datetime.now(timezone.utc),
-            "price_24k": 65.0,
-            "price_22k": 59.6,
-            "price_18k": 48.8,
-            "currency": "USD"
-        }
+    
+    # Return mock data if API fails or any exception occurs
+    return {
+        "timestamp": datetime.now(timezone.utc),
+        "price_24k": 65.0,
+        "price_22k": 59.6,
+        "price_18k": 48.8,
+        "currency": "USD"
+    }
 
 @app.get("/api/gold/prices/historical")
 async def get_historical_prices(days: int = 7):
