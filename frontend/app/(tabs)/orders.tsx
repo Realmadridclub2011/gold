@@ -187,7 +187,7 @@ export default function OrdersScreen() {
 
           <View style={styles.orderFooter}>
             <Text style={styles.totalLabel}>الإجمالي</Text>
-            <Text style={styles.totalAmount}>${order.total_amount.toFixed(2)}</Text>
+            <Text style={styles.totalAmount}>{order.total_amount.toFixed(2)} ريال</Text>
           </View>
 
           {order.tracking_info && (
