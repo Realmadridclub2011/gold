@@ -425,7 +425,10 @@ async def get_portfolio(request: Request):
     
     # Calculate current value based on latest gold price
     current_price_data = await get_current_gold_price()
-    current_value = portfolio["gold_holdings"] * current_price_data["price_24k"]
+    if current_price_data and "price_24k" in current_price_data:
+        current_value = portfolio["gold_holdings"] * current_price_data["price_24k"]
+    else:
+        current_value = portfolio.get("current_value", 0.0)
     
     # Update current value
     await portfolio_collection.update_one(
