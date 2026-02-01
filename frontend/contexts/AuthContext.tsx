@@ -106,8 +106,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const userData = await response.json();
         setUser(userData);
       }
+      // If not logged in, that's okay - allow guest browsing
     } catch (error) {
       console.error('Check session error:', error);
+      // Allow guest access even if check fails
     } finally {
       setLoading(false);
     }
