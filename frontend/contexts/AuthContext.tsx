@@ -117,9 +117,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async () => {
     try {
-      const redirectUrl = Platform.OS === 'web'
-        ? `${BACKEND_URL}/`
-        : Linking.createURL('/');
+      let redirectUrl: string;
+      
+      if (Platform.OS === 'web') {
+        // Use window.location.origin for web (dynamic, works across all environments)
+        if (typeof window !== 'undefined') {
+          redirectUrl = window.location.origin + '/';
+        } else {
+          redirectUrl = BACKEND_URL + '/';
+        }
+      } else {
+        // For native mobile, use deep linking
+        redirectUrl = Linking.createURL('/');
+      }
 
       const authUrl = `${AUTH_URL}/?redirect=${encodeURIComponent(redirectUrl)}`;
 
