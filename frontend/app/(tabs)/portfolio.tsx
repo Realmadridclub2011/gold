@@ -104,7 +104,7 @@ export default function PortfolioScreen() {
       <View style={styles.valueCard}>
         <Text style={styles.valueLabel}>إجمالي القيمة</Text>
         <Text style={styles.valueAmount}>
-          ${portfolio?.current_value.toFixed(2) || '0.00'}
+          {portfolio?.current_value.toFixed(2) || '0.00'} ريال
         </Text>
         <View style={styles.profitContainer}>
           <Text style={[styles.profitText, profit >= 0 ? styles.profitPositive : styles.profitNegative]}>
@@ -123,8 +123,8 @@ export default function PortfolioScreen() {
 
         <View style={styles.statCard}>
           <Text style={styles.statLabel}>إجمالي الاستثمار</Text>
-          <Text style={styles.statValue}>${portfolio?.total_invested.toFixed(2) || '0.00'}</Text>
-          <Text style={styles.statUnit}>دولار</Text>
+          <Text style={styles.statValue}>{portfolio?.total_invested.toFixed(2) || '0.00'} ريال</Text>
+          <Text style={styles.statUnit}>ريال قطري</Text>
         </View>
       </View>
 
