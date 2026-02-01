@@ -1,9 +1,15 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
-import { Platform } from 'react-native';
+import { Platform, I18nManager } from 'react-native';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
+
+// Force RTL
+if (!I18nManager.isRTL) {
+  I18nManager.forceRTL(true);
+  I18nManager.allowRTL(true);
+}
 
 const BACKEND_URL = Constants.expoConfig?.extra?.EXPO_PUBLIC_BACKEND_URL || 'https://golden-treasury.preview.emergentagent.com';
 const AUTH_URL = 'https://auth.emergentagent.com';
