@@ -12,6 +12,15 @@ import uuid
 
 load_dotenv()
 
+# Load environment variables
+GOLDAPI_KEY = os.getenv("GOLDAPI_KEY", "goldapi-demo-key")
+
+# Cache for gold prices (QAR endpoint)
+gold_qar_cache = {
+    "data": None,
+    "timestamp": None
+}
+
 app = FastAPI()
 
 # CORS middleware
