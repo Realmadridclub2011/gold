@@ -17,8 +17,8 @@ export default function TabLayout() {
           height: Platform.OS === 'ios' ? 85 : 65,
           paddingBottom: Platform.OS === 'ios' ? 20 : 10,
           paddingTop: 10,
-          // خليه عادي، هنستخدم ترتيب الشاشات بدل row-reverse
-          flexDirection: 'row',
+          // نجبر ترتيب التابات من اليمين لليسار
+          flexDirection: 'row-reverse',
         },
         tabBarLabelStyle: {
           fontSize: 12,
@@ -26,23 +26,12 @@ export default function TabLayout() {
         },
       }}
     >
-      {/* نبدأ من الحساب -> الطلبات -> المحفظة -> الرئيسية
-          حتى يكون أول عنصر يمين هو "الرئيسية" بصريًا */}
       <Tabs.Screen
-        name="profile"
+        name="index"
         options={{
-          title: 'الحساب',
+          title: 'الرئيسية',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="orders"
-        options={{
-          title: 'الطلبات',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list" size={size} color={color} />
+            <Ionicons name="home" size={size} color={color} />
           ),
         }}
       />
@@ -56,11 +45,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="index"
+        name="orders"
         options={{
-          title: 'الرئيسية',
+          title: 'الطلبات',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
+            <Ionicons name="list" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'الحساب',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
           ),
         }}
       />
