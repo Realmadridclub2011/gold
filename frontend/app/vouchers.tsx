@@ -60,7 +60,7 @@ export default function VouchersScreen() {
         const voucherMessage = `
 مرحباً ${recipientName}! 🎁
 
-لقد حصلت على قسيمة ذهب رقمية بقيمة $${amount}
+لقد حصلت على قسيمة ذهب رقمية بقيمة ${amount} ريال قطري
 
 رمز القسيمة: ${voucher.voucher_id}
 
