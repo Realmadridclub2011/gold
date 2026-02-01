@@ -7,6 +7,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        headerShown: false,
         tabBarActiveTintColor: '#D4AF37',
         tabBarInactiveTintColor: '#B8B8B8',
         tabBarStyle: {
@@ -16,43 +17,23 @@ export default function TabLayout() {
           height: Platform.OS === 'ios' ? 85 : 65,
           paddingBottom: Platform.OS === 'ios' ? 20 : 10,
           paddingTop: 10,
-          // نجبر ترتيب الأيقونات من اليمين لليسار
-          flexDirection: 'row-reverse',
+          // خليه عادي، هنستخدم ترتيب الشاشات بدل row-reverse
+          flexDirection: 'row',
         },
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '600',
         },
-        // نخلي كل آيتم يميل لجهة اليمين أيضًا
-        tabBarItemStyle: {
-          flexDirection: 'column',
-        },
-        headerStyle: {
-          backgroundColor: '#1A1A1A',
-        },
-        headerTintColor: '#FFFFFF',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-          textAlign: 'right',
-        },
-        headerTitleAlign: 'right',
       }}
     >
+      {/* نبدأ من الحساب -> الطلبات -> المحفظة -> الرئيسية
+          حتى يكون أول عنصر يمين هو "الرئيسية" بصريًا */}
       <Tabs.Screen
-        name="index"
+        name="profile"
         options={{
-          title: 'الرئيسية',
+          title: 'الحساب',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="portfolio"
-        options={{
-          title: 'المحفظة',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="wallet" size={size} color={color} />
+            <Ionicons name="person" size={size} color={color} />
           ),
         }}
       />
@@ -66,11 +47,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="portfolio"
         options={{
-          title: 'الحساب',
+          title: 'المحفظة',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
+            <Ionicons name="wallet" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'الرئيسية',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
           ),
         }}
       />
