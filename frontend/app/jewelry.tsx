@@ -148,7 +148,7 @@ export default function JewelryScreen() {
         </View>
 
         <View style={styles.itemFooter}>
-          <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
+          <Text style={styles.itemPrice}>{item.price.toFixed(2)} \u0631\u064a\u0627\u0644</Text>
           
           {item.in_stock ? (
             <TouchableOpacity
