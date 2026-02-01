@@ -16,35 +16,12 @@ import Constants from 'expo-constants';
 
 const BACKEND_URL = Constants.expoConfig?.extra?.EXPO_PUBLIC_BACKEND_URL || 'https://golden-treasury.preview.emergentagent.com';
 
-// صور تجريبية عالية الجودة من Unsplash
-const JEWELRY_IMAGES = {
-  necklace: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400',
-  ring: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400',
-  bracelet: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400',
-  earrings: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400',
-};
-
 interface Store {
   store_id: string;
   name_ar: string;
   rating: number;
   total_products: number;
   is_verified: boolean;
-}
-
-interface JewelryItem {
-  item_id: string;
-  store_id: string;
-  store_name: string;
-  name_ar: string;
-  description_ar: string;
-  price: number;
-  weight_grams: number;
-  karat: number;
-  category: string;
-  image_url?: string;
-  in_stock: boolean;
-  rating?: number;
 }
 
 export default function StoresScreen() {
@@ -90,18 +67,18 @@ export default function StoresScreen() {
     >
       <View style={styles.storeHeader}>
         <View style={styles.storeIconContainer}>
-          <Ionicons name=\"storefront\" size={32} color=\"#D4AF37\" />
+          <Ionicons name="storefront" size={32} color="#D4AF37" />
         </View>
         <View style={styles.storeInfo}>
           <View style={styles.storeNameRow}>
             <Text style={styles.storeName}>{item.name_ar}</Text>
             {item.is_verified && (
-              <Ionicons name=\"checkmark-circle\" size={20} color=\"#10B981\" />
+              <Ionicons name="checkmark-circle" size={20} color="#10B981" />
             )}
           </View>
           <View style={styles.storeStats}>
             <View style={styles.ratingContainer}>
-              <Ionicons name=\"star\" size={16} color=\"#FCD34D\" />
+              <Ionicons name="star" size={16} color="#FCD34D" />
               <Text style={styles.ratingText}>{item.rating.toFixed(1)}</Text>
             </View>
             <Text style={styles.productsText}>
@@ -109,7 +86,7 @@ export default function StoresScreen() {
             </Text>
           </View>
         </View>
-        <Ionicons name=\"chevron-back\" size={24} color=\"#B8B8B8\" />
+        <Ionicons name="chevron-back" size={24} color="#B8B8B8" />
       </View>
       
       <View style={styles.storeBadge}>
@@ -131,11 +108,11 @@ export default function StoresScreen() {
 
       {!user && (
         <TouchableOpacity style={styles.guestBanner} onPress={login}>
-          <Ionicons name=\"person-outline\" size={20} color=\"#D4AF37\" />
+          <Ionicons name="person-outline" size={20} color="#D4AF37" />
           <Text style={styles.guestText}>
             سجل دخولك للشراء والاستثمار
           </Text>
-          <Ionicons name=\"arrow-back\" size={20} color=\"#D4AF37\" />
+          <Ionicons name="arrow-back" size={20} color="#D4AF37" />
         </TouchableOpacity>
       )}
 
@@ -146,7 +123,7 @@ export default function StoresScreen() {
         contentContainerStyle={styles.listContainer}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Ionicons name=\"storefront-outline\" size={60} color=\"#808080\" />
+            <Ionicons name="storefront-outline" size={60} color="#808080" />
             <Text style={styles.emptyText}>لا توجد محلات متاحة حالياً</Text>
           </View>
         }
