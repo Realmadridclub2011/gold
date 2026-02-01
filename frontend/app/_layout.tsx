@@ -1,18 +1,9 @@
-// app/_layout.tsx
 import { Stack } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AuthProvider } from '../contexts/AuthContext';
-import { I18nManager } from 'react-native';
+import { View, ActivityIndicator, I18nManager, Platform } from 'react-native';
 
 export default function RootLayout() {
-  useEffect(() => {
-    if (!I18nManager.isRTL) {
-      I18nManager.allowRTL(true);
-      I18nManager.forceRTL(true);
-      // بعد أول تعديل يفضل إعادة تشغيل / إعادة تثبيت التطبيق
-    }
-  }, []);
-
   return (
     <AuthProvider>
       <Stack
@@ -23,50 +14,47 @@ export default function RootLayout() {
           headerTintColor: '#D4AF37',
           headerTitleStyle: {
             fontWeight: 'bold',
-            textAlign: 'right',
           },
-          headerTitleAlign: 'right',
+          headerBackTitleVisible: false,
+          animation: 'slide_from_left',
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="login"
-          options={{ title: 'تسجيل الدخول', headerShown: false }}
-        />
-        <Stack.Screen
-          name="investment"
-          options={{
+        <Stack.Screen name="login" options={{ title: 'تسجيل الدخول', headerShown: false }} />
+        <Stack.Screen 
+          name="investment" 
+          options={{ 
             title: 'الاستثمار في الذهب',
-            headerBackTitle: 'رجوع',
-          }}
+            headerBackTitle: 'رجوع'
+          }} 
         />
-        <Stack.Screen
-          name="jewelry"
-          options={{
+        <Stack.Screen 
+          name="jewelry" 
+          options={{ 
             title: 'المجوهرات',
-            headerBackTitle: 'رجوع',
-          }}
+            headerBackTitle: 'رجوع'
+          }} 
         />
-        <Stack.Screen
-          name="stores"
-          options={{
+        <Stack.Screen 
+          name="stores" 
+          options={{ 
             title: 'محلات المجوهرات',
-            headerBackTitle: 'رجوع',
-          }}
+            headerBackTitle: 'رجوع'
+          }} 
         />
-        <Stack.Screen
-          name="store/[id]"
-          options={{
+        <Stack.Screen 
+          name="store/[id]" 
+          options={{ 
             title: 'منتجات المحل',
-            headerBackTitle: 'رجوع',
-          }}
+            headerBackTitle: 'رجوع'
+          }} 
         />
-        <Stack.Screen
-          name="vouchers"
-          options={{
+        <Stack.Screen 
+          name="vouchers" 
+          options={{ 
             title: 'القسائم الرقمية',
-            headerBackTitle: 'رجوع',
-          }}
+            headerBackTitle: 'رجوع'
+          }} 
         />
       </Stack>
     </AuthProvider>
