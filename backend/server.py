@@ -338,6 +338,89 @@ async def get_current_gold_price():
         "source": "fallback"
     }
 
+@app.get("/api/gold/qar")
+async def get_live_gold_price_qar():
+    """
+    Fetch REAL-TIME spot gold price in QAR.
+    Uses GoldAPI.io for gold prices and ExchangeRate.host for USD to QAR conversion.
+    Implements 60-second caching to reduce API calls.
+    """
+    try:
+        # Check cache (60 seconds)
+        if gold_qar_cache["data"] and gold_qar_cache["timestamp"]:
+            cache_age = (datetime.now(timezone.utc) - gold_qar_cache["timestamp"]).total_seconds()
+            if cache_age < 60:
+                return gold_qar_cache["data"]
+        
+        # Fetch gold price from GoldAPI.io
+        async with httpx.AsyncClient() as http_client:
+            # Get gold price in USD
+            gold_response = await http_client.get(
+                "https://www.goldapi.io/api/XAU/USD",
+                headers={"x-access-token": GOLDAPI_KEY},
+                timeout=10.0
+            )
+            
+            if gold_response.status_code != 200:
+                raise HTTPException(
+                    status_code=502,
+                    detail=f"GoldAPI returned status {gold_response.status_code}"
+                )
+            
+            gold_data = gold_response.json()
+            ounce_usd = float(gold_data.get("price", 0))
+            
+            if ounce_usd == 0:
+                raise HTTPException(
+                    status_code=502,
+                    detail="Invalid gold price received from GoldAPI"
+                )
+            
+            # Get USD to QAR exchange rate
+            exchange_response = await http_client.get(
+                "https://api.exchangerate.host/latest?base=USD&symbols=QAR",
+                timeout=10.0
+            )
+            
+            if exchange_response.status_code != 200:
+                raise HTTPException(
+                    status_code=502,
+                    detail=f"ExchangeRate API returned status {exchange_response.status_code}"
+                )
+            
+            exchange_data = exchange_response.json()
+            usd_to_qar = float(exchange_data.get("rates", {}).get("QAR", 3.64))
+            
+            # Calculate prices
+            ounce_qar = ounce_usd * usd_to_qar
+            gram_qar = ounce_qar / 31.1034768
+            
+            # Prepare response
+            response_data = {
+                "source": "GoldAPI + ExchangeRateHost",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "ounceUSD": round(ounce_usd, 2),
+                "usdToQar": round(usd_to_qar, 4),
+                "ounceQAR": round(ounce_qar, 2),
+                "gramQAR": round(gram_qar, 2)
+            }
+            
+            # Update cache
+            gold_qar_cache["data"] = response_data
+            gold_qar_cache["timestamp"] = datetime.now(timezone.utc)
+            
+            return response_data
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error fetching live gold price in QAR: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch live gold prices: {str(e)}"
+        )
+
+
 @app.get("/api/gold/prices/historical")
 async def get_historical_prices(days: int = 7):
     try:
