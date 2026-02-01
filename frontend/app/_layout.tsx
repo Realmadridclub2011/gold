@@ -1,7 +1,18 @@
 import { Stack } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { AuthProvider } from '../contexts/AuthContext';
-import { View, ActivityIndicator, I18nManager, Platform } from 'react-native';
+import { I18nManager, Platform } from 'react-native';
+import * as Updates from 'expo-updates';
+
+// Force RTL for Arabic
+if (!I18nManager.isRTL) {
+  I18nManager.forceRTL(true);
+  I18nManager.allowRTL(true);
+  if (Platform.OS !== 'web') {
+    // Reload app on native to apply RTL
+    Updates.reloadAsync();
+  }
+}
 
 export default function RootLayout() {
   return (
@@ -16,7 +27,6 @@ export default function RootLayout() {
             fontWeight: 'bold',
           },
           headerBackTitleVisible: false,
-          animation: 'slide_from_left',
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -25,35 +35,30 @@ export default function RootLayout() {
           name="investment" 
           options={{ 
             title: 'الاستثمار في الذهب',
-            headerBackTitle: 'رجوع'
           }} 
         />
         <Stack.Screen 
           name="jewelry" 
           options={{ 
             title: 'المجوهرات',
-            headerBackTitle: 'رجوع'
           }} 
         />
         <Stack.Screen 
           name="stores" 
           options={{ 
             title: 'محلات المجوهرات',
-            headerBackTitle: 'رجوع'
           }} 
         />
         <Stack.Screen 
           name="store/[id]" 
           options={{ 
             title: 'منتجات المحل',
-            headerBackTitle: 'رجوع'
           }} 
         />
         <Stack.Screen 
           name="vouchers" 
           options={{ 
             title: 'القسائم الرقمية',
-            headerBackTitle: 'رجوع'
           }} 
         />
       </Stack>
