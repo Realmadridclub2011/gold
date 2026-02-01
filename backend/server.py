@@ -275,16 +275,22 @@ async def get_current_gold_price():
             if datetime.now(timezone.utc) - timestamp < timedelta(minutes=1):
                 return cached_price
         
-        # Fetch from GoldAPI.io (free tier)
+        # Fetch from FreeGoldAPI (completely free, no API key needed)
         async with httpx.AsyncClient() as http_client:
             response = await http_client.get(
-                "https://www.goldapi.io/api/XAU/USD",
-                headers={"x-access-token": "goldapi-demo-key"}  # Using demo key for now
+                "https://freegoldapi.com/data/latest.json",
+                timeout=10.0
             )
             
             if response.status_code == 200:
                 data = response.json()
-                price_per_oz_usd = data.get("price", 2000)  # Default fallback
+                # Get latest price from array
+                if data and len(data) > 0:
+                    latest = data[-1]  # Last item is most recent
+                    price_per_oz_usd = float(latest.get("price", 2000))
+                else:
+                    price_per_oz_usd = 2000
+                
                 price_per_gram_usd = price_per_oz_usd / 31.1035  # Convert to grams
                 
                 # Convert to QAR (1 USD = 3.64 QAR)
@@ -301,11 +307,14 @@ async def get_current_gold_price():
                     "price_24k": round(price_24k, 2),
                     "price_22k": round(price_22k, 2),
                     "price_18k": round(price_18k, 2),
-                    "currency": "QAR"
+                    "currency": "QAR",
+                    "source": "FreeGoldAPI"
                 }
                 
                 await gold_prices_collection.insert_one(new_price)
                 return {k: v for k, v in new_price.items() if k != "_id"}
+            else:
+                raise Exception(f"API returned status {response.status_code}")
     
     except Exception as e:
         print(f"Gold price fetch error: {str(e)}")
@@ -313,10 +322,11 @@ async def get_current_gold_price():
     # Return mock data if API fails or any exception occurs (in QAR)
     return {
         "timestamp": datetime.now(timezone.utc),
-        "price_24k": 236.6,  # 65 USD * 3.64
-        "price_22k": 216.9,  # 59.6 USD * 3.64
-        "price_18k": 177.6,  # 48.8 USD * 3.64
-        "currency": "QAR"
+        "price_24k": 236.6,  # Fallback based on typical gold prices
+        "price_22k": 216.9,
+        "price_18k": 177.6,
+        "currency": "QAR",
+        "source": "fallback"
     }
 
 @app.get("/api/gold/prices/historical")
