@@ -180,7 +180,7 @@ export default function OrdersScreen() {
                     {item.quantity} {item.item_type === 'gold_bar' ? 'جرام' : 'قطعة'}
                   </Text>
                 </View>
-                <Text style={styles.itemPrice}>${item.total.toFixed(2)}</Text>
+                <Text style={styles.itemPrice}>{item.total.toFixed(2)} ريال</Text>
               </View>
             ))}
           </View>
