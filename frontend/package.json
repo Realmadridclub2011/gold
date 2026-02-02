@@ -3,12 +3,12 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "dev": "CI=1 expo start --web --host 0.0.0.0 --port 3000",
-    "start": "CI=1 expo start --web --host 0.0.0.0 --port 3000",
+    "dev": "CI=1 expo start --web",
+    "start": "CI=1 expo start --web",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "CI=1 expo start --android",
     "ios": "CI=1 expo start --ios",
-    "web": "CI=1 expo start --web --host 0.0.0.0 --port 3000",
+    "web": "CI=1 expo start --web",
     "lint": "expo lint"
   },
   "dependencies": {
