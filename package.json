@@ -2,6 +2,6 @@
   "name": "gold",
   "private": true,
   "scripts": {
-    "dev": "cd frontend && npm run dev"
+    "dev": "npm --prefix frontend run dev"
   }
 }
